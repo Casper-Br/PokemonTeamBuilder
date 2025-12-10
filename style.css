@@ -1,0 +1,53 @@
+html, body {
+    height: 100%;
+}
+.title{
+    text-align: center;
+}
+
+.container {
+    justify-content: center;
+    justify-items: center;
+    display: flex;
+}
+
+.teamView {
+    background-color: blue;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 4%;
+    width: 30%;
+    margin: auto;
+    padding: 1%; 
+}
+
+.teamPokemon {
+    background-color: lightblue;
+    padding: 10%;
+    margin: auto;
+}
+
+.buttons {
+    background: none;
+    display: grid;
+    grid-template-columns: auto;
+    gap: 4%;
+    margin: auto;
+    width: 20%;
+}
+
+.button {
+    background-color: pink;
+    border: none;
+}
+
+.typeAdvice{
+    background-color: purple;
+    margin-top: 2%;
+}
+
+.pokedex {
+    background-color: red;
+    width: 30%;
+    margin: auto;
+}
