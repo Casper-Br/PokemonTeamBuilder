@@ -6,15 +6,18 @@ html, body {
 }
 
 .container {
+    align-items: flex-start;
     justify-content: center;
     justify-items: center;
     display: flex;
+    width: 100%;
+    height: 100%;
 }
 
 .teamView {
     background-color: blue;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
     width: 30%;
     margin: auto;
@@ -38,7 +41,7 @@ html, body {
 .buttons {
     background: none;
     display: grid;
-    grid-template-columns: auto;
+    grid-template-columns: 1fr;
     gap: 4%;
     margin: auto;
     width: 20%;
@@ -56,6 +59,28 @@ html, body {
 
 .pokedex {
     background-color: red;
-    width: 30%;
-    margin: auto;
+    padding: 0.5rem;
+    width: auto;
+    height: 100%;
+    margin: auto; 
+    display: flex;
+    flex-direction: column;
+}
+
+
+#pokemonDisplay {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    height: 100%;
+    overflow-y: auto;
+    justify-items: stretch;
+    align-items: stretch;
+}
+
+.pokemonListElement {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    text-align: center;
+    background-color: pink;
 }
