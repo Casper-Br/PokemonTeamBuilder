@@ -1,86 +1,135 @@
-html, body {
-    height: 100%;
-}
-.title{
+.title {
+    font-family: "Arial Black", "Trebuchet MS", Impact, sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: 2px;
     text-align: center;
+    color: #ffcb05;
+    text-transform: capitalize;
+    text-shadow:
+      -3px -3px 0 #2a75bb,
+       3px -3px 0 #2a75bb,
+      -3px  3px 0 #2a75bb,
+       3px  3px 0 #2a75bb,
+       0px  6px 0 #1c4e9a,
+       0px  10px 15px rgba(0, 0, 0, 0.45);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
-    align-items: flex-start;
-    justify-content: center;
-    justify-items: center;
+    margin: 3rem;
     display: flex;
-    width: 100%;
-    height: 100%;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 2rem;
 }
 
 .teamView {
     background-color: blue;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    width: 30%;
-    margin: auto;
-    padding: 2rem; 
+    padding: 1rem;
+    border-radius: 10px;
+    box-sizing: border-box;
+    max-height: 75vh;
+    flex: 2;
 }
 
 .teamPokemon {
     background-color: lightblue;
-    padding: 2rem;
+    padding: 1rem;
     user-select: none;
     margin: 0;
+    cursor: pointer;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .teamPokemon.selected {
     background-color: green;
-    padding: 2rem;
-    user-select: none;
-    margin: 0;
 }
 
 .buttons {
-    background: none;
     display: grid;
     grid-template-columns: 1fr;
     gap: 4%;
-    margin: auto;
-    width: 20%;
+    max-height: 75vh;
+    box-sizing: border-box;
+    flex: 0.5;
 }
 
 .button {
     background-color: pink;
     border: none;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
-.typeAdvice{
-    background-color: purple;
-    margin-top: 2%;
+.button:hover {
+    background-color: #ff4757;
+}
+
+.typeAdvice {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #6a1b9a;
+    color: white;
+    padding: 1rem;
+    border-radius: 10px;
+    font-weight: bold;
 }
 
 .pokedex {
+    text-align: center;
     background-color: red;
     padding: 0.5rem;
-    width: auto;
-    height: 100%;
-    margin: auto; 
     display: flex;
     flex-direction: column;
+    border-radius: 10px;
+    flex: 2;
+    overflow: hidden;
+    max-height: 75vh;
+    box-sizing: border-box;
 }
 
+.SearchFilter {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
 
+}
 #pokemonDisplay {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 1rem;
-    height: 100%;
     overflow-y: auto;
-    justify-items: stretch;
-    align-items: stretch;
+    flex: 1;
 }
 
 .pokemonListElement {
     overflow-wrap: break-word;
-    word-wrap: break-word;
     text-align: center;
     background-color: pink;
+    border-radius: 10px;
+    cursor: pointer;
 }
+
+.pokemonListElement:hover {
+    transform: scale(1.05);
+}
+
+/* TODO: Add media queries for different size screens */

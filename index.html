@@ -5,34 +5,38 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Pokemon Sacred Gold Team Builder</title>
         <link rel="stylesheet" href="style.css">
-        <h1 class="title"> Pokemon Sacred Gold; Team Builder</h1>
     </head>
     <body>
+        <h1 class="title"> Pokemon Sacred Gold; Team Builder</h1>
         <div class="container">
             <div class="teamView">
-                <div class="teamPokemon"> Pokemon 1 </div>
-                <div class="teamPokemon"> Pokemon 2 </div>
-                <div class="teamPokemon"> Pokemon 3 </div>
-                <div class="teamPokemon"> Pokemon 4 </div>
-                <div class="teamPokemon"> Pokemon 5 </div>
-                <div class="teamPokemon"> Pokemon 6 </div>
+                <div class="teamPokemon" id="slot1">Pokemon 1</div>
+                <div class="teamPokemon" id="slot2">Pokemon 2</div>
+                <div class="teamPokemon" id="slot3">Pokemon 3</div>
+                <div class="teamPokemon" id="slot4">Pokemon 4</div>
+                <div class="teamPokemon" id="slot5">Pokemon 5</div>
+                <div class="teamPokemon" id="slot6">Pokemon 6</div>
             </div>
             <div class="buttons">
-                <button type="button" class="button">Button 1</button>
-                <button type="button" class="button">Button 2</button>
-                <button type="button" class="button">Button 3</button>
+                <button type="button" class="button">Add Pokemon</button>
+                <button type="button" class="button">Remove Pokemon</button>
+                <button type="button" class="button">Suggest Pokemon</button>
                 <div class="typeAdvice"> Type Advice </div>
             </div>
             <div class="pokedex">
                 <div class="pokedexHeader">
-                    <div> Pokedex </div>
-                    <div> Search Bar <input type="text" placeholder="Search Pokemon..."></input> <button type="button">Search</button></div>
-                    <div> <select name="type">
-                        <option value="anyType">Any Type</option>
-                        <option value="fire">Fire</option>
-                        <option value="water">Water</option>
-                        <option value="grass">Grass</option>
-                    </select>
+                    <h3> Pokedex </h3>
+                    <div class="SearchFilter">
+                        <label for="search">Search Pokemon:</label>
+                        <input type="text" id="search" placeholder="Search Pokemon...">
+                        <button type="button">Search</button>
+                        <label for="typeFilter">Filter by Type:</label>
+                        <select name="type" id="typeFilter">
+                            <option value="anyType">Any Type</option>
+                            <option value="fire">Fire</option>
+                            <option value="water">Water</option>
+                            <option value="grass">Grass</option>
+                        </select>
                     </div>
                 </div>
                 <div id="pokemonDisplay"></div>
