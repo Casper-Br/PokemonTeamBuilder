@@ -5,6 +5,11 @@ const pokemonDisplay = document.getElementById("pokemonDisplay");
 const typeFilter = document.getElementById("typeFilter");
 const type_API = "https://pokeapi.co/api/v2/type";
 let allPokemon = [];
+const addBtn = document.getElementById("addPokemon");
+let selectedTeamSlot = null;
+let selectedPokemon = null;
+const removeBtn = document.getElementById("removePokemon");
+
 
 async function loadAllPokemon() {
     try {
@@ -23,7 +28,7 @@ teamPokemons.forEach(teamPokemon => {
         teamPokemons.forEach(i => i.classList.remove("selected"));
         
         teamPokemon.classList.add("selected");
-        selectedItem = teamPokemon;
+        selectedTeamSlot = teamPokemon;
     });
 });
 
@@ -34,7 +39,7 @@ function initPokemonListElement() {
         pokemonListElement.addEventListener("click", () => {
             pokemonListElements.forEach(i => i.classList.remove("selected"));
             pokemonListElement.classList.add("selected");
-            selectedItem = pokemonListElement;
+            selectedPokemon = pokemonListElement;
         });
     });
 }
@@ -92,5 +97,16 @@ async function displayPokemonByType() {
         console.error("Error fetching Pokemon by type", error);
     }
 }
+
+addBtn.addEventListener("click", () => {
+    if (!selectedTeamSlot || !selectedPokemon) return;
+    selectedTeamSlot.innerText = selectedPokemon.innerText;
+});
+
+removeBtn.addEventListener("click", () => {
+    if(!selectedTeamSlot) return;
+    const slotIndex = [...teamPokemons].indexOf(selectedTeamSlot) + 1;
+    selectedTeamSlot.innerText = `Pokemon ${slotIndex}`;
+});
 
 window.onload = loadAllPokemon;
