@@ -128,8 +128,7 @@ body {
     cursor: pointer;
 }
 
-.pokemonListElement:hover {
-    transform: scale(1.05);
+.pokemonListElement.selected {
+    background-color: white;
 }
-
 /* TODO: Add media queries for different size screens */
