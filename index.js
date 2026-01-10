@@ -10,7 +10,6 @@ let selectedTeamSlot = null;
 let selectedPokemon = null;
 const removeBtn = document.getElementById("removePokemon");
 
-
 async function loadAllPokemon() {
     try {
         const response = await fetch(pokemon_API);
