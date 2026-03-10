@@ -15,7 +15,7 @@ const typeChart = {
     ghost:    { resists: ["normal","fighting","poison","bug"], strongAgainst: ["psychic","ghost"] },
     dragon:   { resists: ["fire","water","electric","grass"], strongAgainst: ["dragon"] },
     dark:     { resists: ["ghost","dark","psychic"], strongAgainst: ["psychic","ghost"] },
-    steel:    { resists: ["normal","grass","ice","flying","psychic","bug","rock","dragon","steel"], strongAgainst: ["ice","rock"] } // Steel exists in Gen IV
+    steel:    { resists: ["normal","grass","ice","flying","psychic","bug","rock","dragon","steel", "poison"], strongAgainst: ["ice","rock"] }
   };
 
 const typeColors = {
