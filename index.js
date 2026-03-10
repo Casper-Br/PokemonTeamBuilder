@@ -203,6 +203,8 @@ function updateTypeAdvice() {
         }
     });
 
+    typeAdvice.replaceChildren();
+
     if (teamTypes.length === 0) {
         typeAdvice.innerText = "Your team is weak against everything.";
         return;
@@ -216,15 +218,34 @@ function updateTypeAdvice() {
         chart.strongAgainst.forEach(t => offensiveCoverage.add(t));
         chart.resists.forEach(t => defensiveCoverage.add(t));
     });
+    
     const offensiveWeak = allTypes.filter(t => !offensiveCoverage.has(t));
     const defensiveWeak = allTypes.filter(t => !defensiveCoverage.has(t)); 
+    
     if (offensiveWeak.length === 0 && defensiveWeak.length === 0) {
         typeAdvice.innerText = "Your team is strong against everything.";
         return;
     }
-    typeAdvice.innerText = 
-    `Your team is offensively weak against: ${offensiveWeak.join(", ")}
-    Your team is defensively weak against: ${defensiveWeak.join(", ")}`;
+
+    const createTypeSpans = (typesArray) => {
+        return typesArray.map(tName => {
+            const span = document.createElement("span");
+            span.classList.add("typeBox");
+            span.style.backgroundColor = typeColors[tName] || "gray";
+            span.innerText = tName;
+            return span;
+        });
+    };
+
+    const offensiveLabel = document.createElement("div");
+    offensiveLabel.innerText = "Offensively weak against: ";
+    createTypeSpans(offensiveWeak).forEach(span => offensiveLabel.appendChild(span));
+    typeAdvice.appendChild(offensiveLabel);
+
+    const defensiveLabel = document.createElement("div");
+    defensiveLabel.innerText = "Defensively weak against: ";
+    createTypeSpans(defensiveWeak).forEach(span => defensiveLabel.appendChild(span));
+    typeAdvice.appendChild(defensiveLabel);
 }
 
 window.onload = loadAllPokemon;
