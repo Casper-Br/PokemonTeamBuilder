@@ -1,39 +1,60 @@
-const pokemon_API = "https://pokeapi.co/api/v2/pokemon?limit=493&offset=0"
+const typeColors = {
+    normal: "#A8A77A",
+    fire: "#EE8130",
+    water: "#6390F0",
+    electric: "#F7D02C",
+    grass: "#7AC74C",
+    ice: "#96D9D6",
+    fighting: "#C22E28",
+    poison: "#A33EA1",
+    ground: "#E2BF65",
+    flying: "#A98FF3",
+    psychic: "#F95587",
+    bug: "#A6B91A",
+    rock: "#B6A136",
+    ghost: "#735797",
+    dragon: "#6F35FC",
+    dark: "#705746"
+};
+
+const pokemon_API = "https://pokeapi.co/api/v2/pokemon?limit=493&offset=0";
+const pokeName_API = "https://pokeapi.co/api/v2/pokemon/";
+const type_API = "https://pokeapi.co/api/v2/type";
+
 const teamPokemons = document.querySelectorAll(".teamPokemon");
-let selectedItem = null;
 const pokemonDisplay = document.getElementById("pokemonDisplay");
 const typeFilter = document.getElementById("typeFilter");
-const type_API = "https://pokeapi.co/api/v2/type";
-let allPokemon = [];
+
 const addBtn = document.getElementById("addPokemon");
+const removeBtn = document.getElementById("removePokemon");
+
+let allPokemon = [];
 let selectedTeamSlot = null;
 let selectedPokemon = null;
-const removeBtn = document.getElementById("removePokemon");
 
 async function loadAllPokemon() {
     try {
         const response = await fetch(pokemon_API);
         const data = await response.json();
         allPokemon = data.results.map(p => p.name);
-
         displayPokemonByType();
     } catch (error) {
-        console.error("Error loading all Pokemon", error);
+        console.error("Error loading Pokémon", error);
     }
 }
 
 teamPokemons.forEach(teamPokemon => {
     teamPokemon.addEventListener("click", () => {
-        teamPokemons.forEach(i => i.classList.remove("selected"));
-        
+        teamPokemons.forEach(p => p.classList.remove("selected"));
         teamPokemon.classList.add("selected");
         selectedTeamSlot = teamPokemon;
     });
 });
 
+
+
 function initPokemonListElement() {
     const pokemonListElements = document.querySelectorAll(".pokemonListElement");
-
     pokemonListElements.forEach(pokemonListElement => {
         pokemonListElement.addEventListener("click", () => {
             pokemonListElements.forEach(i => i.classList.remove("selected"));
@@ -58,6 +79,7 @@ async function loadPokemonTypes() {
         console.error("Error fetching types", error);
     }
 }
+
 loadPokemonTypes();
 
 typeFilter.addEventListener("change", displayPokemonByType);
@@ -68,44 +90,72 @@ async function displayPokemonByType() {
 
     if (selectedType === "anyType") {
         allPokemon.forEach(name => {
-            const pokemonListElement = document.createElement('div');
+            const pokemonListElement = document.createElement("div");
             pokemonListElement.innerText = name;
-            pokemonListElement.classList.add('pokemonListElement');
+            pokemonListElement.classList.add("pokemonListElement");
             pokemonDisplay.appendChild(pokemonListElement);
         });
         initPokemonListElement();
         return;
     }
 
+
+
     try {
         const typeResponse = await fetch(`https://pokeapi.co/api/v2/type/${selectedType}`);
         const typeData = await typeResponse.json();
-
         typeData.pokemon.forEach(pokeEntry => {
             const name = pokeEntry.pokemon.name;
             if (allPokemon.includes(name)) {
-                const pokemonListElement = document.createElement('div');
-                    pokemonListElement.innerText = name;
-                    pokemonListElement.classList.add('pokemonListElement');
-                    pokemonDisplay.appendChild(pokemonListElement);
+                const pokemonListElement = document.createElement("div");
+                pokemonListElement.innerText = name;
+                pokemonListElement.classList.add("pokemonListElement");
+                pokemonDisplay.appendChild(pokemonListElement);
             }
         });
-
         initPokemonListElement();
     } catch (error) {
-        console.error("Error fetching Pokemon by type", error);
+        console.error("Error fetching Pokémon by type", error);
     }
 }
 
-addBtn.addEventListener("click", () => {
+addBtn.addEventListener("click", async () => {
     if (!selectedTeamSlot || !selectedPokemon) return;
-    selectedTeamSlot.innerText = selectedPokemon.innerText;
+    const pokeName = selectedPokemon.innerText.toLowerCase();
+    try {
+        const response = await fetch(`${pokeName_API}${pokeName}`);
+        const data = await response.json();
+        selectedTeamSlot.innerHTML = "";
+        const img = document.createElement("img");
+        img.src = data.sprites.front_default;
+        img.alt = pokeName;
+        img.style.width = "80px";
+        img.style.height = "80px";
+        const nameEl = document.createElement("div");
+        nameEl.innerText = pokeName;
+        nameEl.style.fontWeight = "bold";
+        const typesEl = document.createElement("div");
+
+        data.types.forEach(t => {
+            const typeBox = document.createElement("span");
+            typeBox.classList.add("typeBox");
+            typeBox.innerText = t.type.name;
+            typeBox.style.backgroundColor = typeColors[t.type.name] || "gray";
+            typesEl.appendChild(typeBox);
+        });
+
+        selectedTeamSlot.appendChild(img);
+        selectedTeamSlot.appendChild(nameEl);
+        selectedTeamSlot.appendChild(typesEl);
+    } catch (error) {
+        console.error("Error fetching Pokémon details", error);
+    }
 });
 
 removeBtn.addEventListener("click", () => {
-    if(!selectedTeamSlot) return;
+    if (!selectedTeamSlot) return;
     const slotIndex = [...teamPokemons].indexOf(selectedTeamSlot) + 1;
-    selectedTeamSlot.innerText = `Pokemon ${slotIndex}`;
+    selectedTeamSlot.innerHTML = `Pokemon ${slotIndex}`;
 });
 
 window.onload = loadAllPokemon;
