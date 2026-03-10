@@ -46,6 +46,8 @@ const teamPokemons = document.querySelectorAll(".teamPokemon");
 const pokemonDisplay = document.getElementById("pokemonDisplay");
 const typeFilter = document.getElementById("typeFilter");
 
+const searchInput = document.getElementById("search");
+
 const addBtn = document.getElementById("addPokemon");
 const removeBtn = document.getElementById("removePokemon");
 
@@ -247,6 +249,28 @@ function updateTypeAdvice() {
     createTypeSpans(defensiveWeak).forEach(span => defensiveLabel.appendChild(span));
     typeAdvice.appendChild(defensiveLabel);
 }
+
+function displaySearchResults(results) {
+    pokemonDisplay.replaceChildren();
+    results.forEach(name => {
+        const el = document.createElement("div");
+        el.classList.add("pokemonListElement");
+        el.innerText = name;
+        pokemonDisplay.appendChild(el);
+    });
+    initPokemonListElement();
+}
+
+searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    if (!query) {
+        displayPokemonByType();
+        return;
+    }
+
+    const results = allPokemon.filter(name => name.toLowerCase().startsWith(query));
+    displaySearchResults(results);
+});
 
 window.onload = loadAllPokemon;
 updateTypeAdvice();
