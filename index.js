@@ -1,3 +1,23 @@
+const typeChart = {
+    normal:   { resists: ["ghost"], strongAgainst: [] },
+    fire:     { resists: ["fire","grass","ice","bug","steel"], strongAgainst: ["grass","ice","bug","steel"] },
+    water:    { resists: ["fire","water","ice","steel"], strongAgainst: ["fire","ground","rock"] },
+    electric: { resists: ["electric","flying","steel"], strongAgainst: ["water","flying"] },
+    grass:    { resists: ["water","electric","grass","ground"], strongAgainst: ["water","ground","rock"] },
+    ice:      { resists: ["ice"], strongAgainst: ["grass","ground","flying","dragon"] },
+    fighting: { resists: ["bug","rock","dark"], strongAgainst: ["normal","ice","rock","dark","steel"] },
+    poison:   { resists: ["grass","fighting","poison","bug"], strongAgainst: ["grass"] },
+    ground:   { resists: ["poison","rock","electric"], strongAgainst: ["fire","electric","poison","rock","steel"] },
+    flying:   { resists: ["grass","fighting","bug","ground"], strongAgainst: ["grass","fighting","bug"] },
+    psychic:  { resists: ["fighting","psychic"], strongAgainst: ["fighting","poison"] },
+    bug:      { resists: ["grass","fighting","ground"], strongAgainst: ["grass","psychic","dark"] },
+    rock:     { resists: ["normal","fire","poison","flying"], strongAgainst: ["fire","ice","flying","bug"] },
+    ghost:    { resists: ["normal","fighting","poison","bug"], strongAgainst: ["psychic","ghost"] },
+    dragon:   { resists: ["fire","water","electric","grass"], strongAgainst: ["dragon"] },
+    dark:     { resists: ["ghost","dark","psychic"], strongAgainst: ["psychic","ghost"] },
+    steel:    { resists: ["normal","grass","ice","flying","psychic","bug","rock","dragon","steel"], strongAgainst: ["ice","rock"] } // Steel exists in Gen IV
+  };
+
 const typeColors = {
     normal: "#A8A77A",
     fire: "#EE8130",
@@ -14,7 +34,8 @@ const typeColors = {
     rock: "#B6A136",
     ghost: "#735797",
     dragon: "#6F35FC",
-    dark: "#705746"
+    dark: "#705746",
+    steel: "#B7B7CE"
 };
 
 const pokemon_API = "https://pokeapi.co/api/v2/pokemon?limit=493&offset=0";
@@ -122,31 +143,43 @@ async function displayPokemonByType() {
 addBtn.addEventListener("click", async () => {
     if (!selectedTeamSlot || !selectedPokemon) return;
     const pokeName = selectedPokemon.innerText.toLowerCase();
+
     try {
         const response = await fetch(`${pokeName_API}${pokeName}`);
         const data = await response.json();
         selectedTeamSlot.innerHTML = "";
+
         const img = document.createElement("img");
         img.src = data.sprites.front_default;
         img.alt = pokeName;
         img.style.width = "80px";
         img.style.height = "80px";
+
         const nameEl = document.createElement("div");
         nameEl.innerText = pokeName;
         nameEl.style.fontWeight = "bold";
+
         const typesEl = document.createElement("div");
 
-        data.types.forEach(t => {
+        const gen4Types = data.types
+            .map(t => t.type.name)
+            .filter(t => t in typeChart);
+
+        selectedTeamSlot.dataset.types = gen4Types.join(",");
+
+        gen4Types.forEach(tName => {
             const typeBox = document.createElement("span");
             typeBox.classList.add("typeBox");
-            typeBox.innerText = t.type.name;
-            typeBox.style.backgroundColor = typeColors[t.type.name] || "gray";
+            typeBox.innerText = tName;
+            typeBox.style.backgroundColor = typeColors[tName] || "gray";
             typesEl.appendChild(typeBox);
         });
 
         selectedTeamSlot.appendChild(img);
         selectedTeamSlot.appendChild(nameEl);
         selectedTeamSlot.appendChild(typesEl);
+
+        updateTypeAdvice();
     } catch (error) {
         console.error("Error fetching Pokémon details", error);
     }
@@ -156,6 +189,43 @@ removeBtn.addEventListener("click", () => {
     if (!selectedTeamSlot) return;
     const slotIndex = [...teamPokemons].indexOf(selectedTeamSlot) + 1;
     selectedTeamSlot.innerHTML = `Pokemon ${slotIndex}`;
-});
+    selectedTeamSlot.dataset.types = "";
+    updateTypeAdvice();
+    });
+
+function updateTypeAdvice() {
+    const typeAdvice = document.getElementById("typeAdvice");
+    let teamTypes = [];
+    teamPokemons.forEach(slot => {
+        const types = slot.dataset.types;
+        if (types) {
+            teamTypes.push(...types.split(","));
+        }
+    });
+
+    if (teamTypes.length === 0) {
+        typeAdvice.innerText = "Your team is weak against everything.";
+        return;
+    } 
+    
+    const allTypes = Object.keys(typeChart);
+    const offensiveCoverage = new Set();
+    const defensiveCoverage = new Set();
+    teamTypes.forEach(type => {
+        const chart = typeChart[type];
+        chart.strongAgainst.forEach(t => offensiveCoverage.add(t));
+        chart.resists.forEach(t => defensiveCoverage.add(t));
+    });
+    const offensiveWeak = allTypes.filter(t => !offensiveCoverage.has(t));
+    const defensiveWeak = allTypes.filter(t => !defensiveCoverage.has(t)); 
+    if (offensiveWeak.length === 0 && defensiveWeak.length === 0) {
+        typeAdvice.innerText = "Your team is strong against everything.";
+        return;
+    }
+    typeAdvice.innerText = 
+    `Your team is offensively weak against: ${offensiveWeak.join(", ")}
+    Your team is defensively weak against: ${defensiveWeak.join(", ")}`;
+}
 
 window.onload = loadAllPokemon;
+updateTypeAdvice();
