@@ -1,7 +1,7 @@
 # Pokemon Sacred Gold Team Builder
-This web application is a team builder for the pokemon ROMhack "Pokemon Sacred Gold".
+This web application is a team builder for the Pokemon ROMhack ["Pokemon Sacred Gold".](https://gbatemp.net/threads/pokemon-sacred-gold-storm-silver.327567/)
 
-It allows uses to search and filter from all pokemon obtainable in Pokemon Sacred Gold. You can add them to a six slot team and analyze your team's overall type coverage. Pokemon sprites and type information are retrieved dynamically from https://pokeapi.co
+It allows users to search and filter from all Pokemon obtainable in Pokemon Sacred Gold. You can add them to a six slot team and analyze your team's overall type coverage. Pokemon sprites and type information are retrieved dynamically from https://pokeapi.co
 
 ## Everything you need to know before you start
 
@@ -21,8 +21,8 @@ I am looking to host it somewhere in the future.
 - Display Pokemon sprites and types
 - Dynamically updated team view
 - Automatic type coverage analysis
-- Seperate offensive and defensive type weakness detection.
-- Suggest a pokemon for the team (Work in progress!)
+- Separate offensive and defensive type weakness detection.
+- Suggest a Pokemon for the team (Work in progress!)
 
 ## Tech Stack
 
@@ -35,7 +35,7 @@ External data:
 
 ## Why I made this
 
-I created this project to practie building an interactive frontend application that retrieves and processes data from an external API. I specifically chose to make this project because I have been wanting to play Pokemon Sacred Gold but could not decide on what team I would wanted to use. Since Sacred Gold is notoriously difficult, I decided I would code a project that would help me pick a strong team.
+I created this project to practice building an interactive frontend application that retrieves and processes data from an external API. I specifically chose to make this project because I have been wanting to play Pokemon Sacred Gold but could not decide on what team I would want to use. Since Sacred Gold is notoriously difficult, I decided I would code a project that would help me pick a strong team.
 
 While working on this project I gained experience with:
 
