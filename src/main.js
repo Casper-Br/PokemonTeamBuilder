@@ -1,25 +1,41 @@
 import {
     getAllPokemon,
     getPokemonByType,
+    getPokemonByName
 } from "./api/pokemonApi.js";
 import {
     searchPokemon,
     filterPokemonByType
 } from "./logic/pokedexLogic.js";
+import { prepareTeamPokemon } from "./logic/teamLogic.js";
 import {
     searchInput,
-    typeFilter
+    typeFilter,
+    teamSlots,
+    addButton
 } from "./ui/dom.js";
 import {
     renderPokemonList,
-    renderTypeOptions
+    renderTypeOptions,
+    selectPokemon
 } from "./ui/pokedexView.js";
 import { typeChart } from "./data/typeChart.js";
+import {
+    getSelectedTeamSlot,
+    getSelectedPokemon,
+    setSelectedTeamSlot,
+    setSelectedPokemon
+} from "./state/appState.js";
+import {
+    selectTeamSlot,
+    renderPokemonInSlot
+} from "./ui/teamView.js";
 
 const allPokemon = await getAllPokemon();
 const supportedTypes = Object.keys(typeChart);
 
 renderPokemonList(allPokemon);
+initializePokemonSelection();
 renderTypeOptions(supportedTypes);
 
 searchInput.addEventListener("input", () => {
@@ -27,6 +43,7 @@ searchInput.addEventListener("input", () => {
     const results = searchPokemon(allPokemon, query);
 
     renderPokemonList(results);
+    initializePokemonSelection();
 });
 
 typeFilter.addEventListener("change", async () => {
@@ -34,6 +51,7 @@ typeFilter.addEventListener("change", async () => {
 
     if (selectedType === "anyType") {
         renderPokemonList(allPokemon);
+        initializePokemonSelection();
         return;
     }
 
@@ -41,4 +59,41 @@ typeFilter.addEventListener("change", async () => {
     const results = filterPokemonByType(allPokemon, typeData);
 
     renderPokemonList(results);
+    initializePokemonSelection();
+});
+
+teamSlots.forEach(teamSlot => {
+    teamSlot.addEventListener("click", () => {
+        selectTeamSlot(teamSlot);
+        setSelectedTeamSlot(teamSlot);
+    });
+});
+
+function initializePokemonSelection() {
+    const pokemonElements = document.querySelectorAll(".pokemonListElement");
+
+    pokemonElements.forEach(pokemonElement => {
+        pokemonElement.addEventListener("click", () => {
+            selectPokemon(pokemonElement);
+            setSelectedPokemon(pokemonElement.innerText);
+        });
+    });
+}
+
+addButton.addEventListener("click", async () => {
+    const selectedSlot = getSelectedTeamSlot();
+    const selectedPokemon = getSelectedPokemon();
+
+    if (!selectedSlot || !selectedPokemon) {
+        return;
+    }
+
+    try {
+        const pokemonData = await getPokemonByName(selectedPokemon);
+        const teamPokemon = prepareTeamPokemon(pokemonData);
+
+        renderPokemonInSlot(selectedSlot, teamPokemon);
+    } catch (error) {
+        console.error("Error adding Pokémon:", error);
+    }
 });

@@ -1,11 +1,26 @@
-let pokemonList = [];
+let selectedTeamSlot = null;
 
-function getPokemonList() {
-    return pokemonList;
+function getSelectedTeamSlot() {
+    return selectedTeamSlot;
 }
 
-function setPokemonList(pokemon) {
-    pokemonList = pokemon;
+function setSelectedTeamSlot(slot) {
+    selectedTeamSlot = slot;
 }
 
-export { getPokemonList, setPokemonList };
+let selectedPokemon = null;
+
+function getSelectedPokemon() {
+    return selectedPokemon;
+}
+
+function setSelectedPokemon(pokemon) {
+    selectedPokemon = pokemon;
+}
+
+export {
+    getSelectedTeamSlot,
+    setSelectedTeamSlot,
+    getSelectedPokemon,
+    setSelectedPokemon
+};

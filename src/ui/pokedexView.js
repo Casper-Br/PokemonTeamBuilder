@@ -13,6 +13,16 @@ function renderPokemonList(pokemonNames) {
     });
 }
 
+function selectPokemon(pokemonElement) {
+    const pokemonListElements = document.querySelectorAll(".pokemonListElement");
+
+    pokemonListElements.forEach(element => {
+        element.classList.remove("selected");
+    });
+
+    pokemonElement.classList.add("selected");
+}
+
 function renderTypeOptions(types) {
     types.forEach(type => {
         const option = document.createElement("option");
@@ -24,4 +34,8 @@ function renderTypeOptions(types) {
     });
 }
 
-export { renderPokemonList, renderTypeOptions };
+export {
+    renderPokemonList,
+    renderTypeOptions,
+    selectPokemon
+};
