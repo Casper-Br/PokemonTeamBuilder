@@ -9,7 +9,8 @@ import {
 } from "./logic/pokedexLogic.js";
 import {
     prepareTeamPokemon,
-    getEmptySlotText
+    getEmptySlotText,
+    calculateTypeAdvice
 } from "./logic/teamLogic.js";
 import {
     searchInput,
@@ -26,14 +27,18 @@ import {
 import {
     selectTeamSlot,
     renderPokemonInSlot,
-    removePokemonFromSlot
+    removePokemonFromSlot,
+    renderTypeAdvice
 } from "./ui/teamView.js";
 import { typeChart } from "./data/typeChart.js";
 import {
     getSelectedTeamSlot,
     getSelectedPokemon,
     setSelectedTeamSlot,
-    setSelectedPokemon
+    setSelectedPokemon,
+    getTeam,
+    setTeamPokemon,
+    removeTeamPokemon
 } from "./state/appState.js";
 
 const allPokemon = await getAllPokemon();
@@ -42,6 +47,7 @@ const supportedTypes = Object.keys(typeChart);
 renderPokemonList(allPokemon);
 initializePokemonSelection();
 renderTypeOptions(supportedTypes);
+renderTypeAdvice(calculateTypeAdvice(getTeam()));
 
 searchInput.addEventListener("input", () => {
     const query = searchInput.value;
@@ -97,7 +103,14 @@ addButton.addEventListener("click", async () => {
         const pokemonData = await getPokemonByName(selectedPokemon);
         const teamPokemon = prepareTeamPokemon(pokemonData);
 
+        const slotIndex = [...teamSlots].indexOf(selectedSlot);
+
+        setTeamPokemon(slotIndex, teamPokemon);
+
         renderPokemonInSlot(selectedSlot, teamPokemon);
+
+        const advice = calculateTypeAdvice(getTeam());
+        renderTypeAdvice(advice);
     } catch (error) {
         console.error("Error adding Pokémon:", error);
     }
@@ -110,10 +123,20 @@ removeButton.addEventListener("click", () => {
         return;
     }
 
+    const slotIndex = [...teamSlots].indexOf(selectedSlot);
+
+    removeTeamPokemon(slotIndex);
+
     const emptySlotText = getEmptySlotText(
         selectedSlot,
         teamSlots
     );
 
-    removePokemonFromSlot(selectedSlot, emptySlotText);
+    removePokemonFromSlot(
+        selectedSlot,
+        emptySlotText
+    );
+
+    const advice = calculateTypeAdvice(getTeam());
+    renderTypeAdvice(advice);
 });

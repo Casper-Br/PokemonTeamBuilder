@@ -1,4 +1,4 @@
-import { teamSlots } from "./dom.js";
+import { teamSlots, typeAdvice } from "./dom.js";
 import { typeColors } from "../data/typeColors.js";
 
 function selectTeamSlot(slot) {
@@ -44,8 +44,55 @@ function removePokemonFromSlot(slot, emptySlotText) {
     slot.dataset.types = "";
 }
 
+function renderTypeAdvice(advice) {
+    typeAdvice.replaceChildren();
+
+    if (!advice.hasTeam) {
+        typeAdvice.innerText = "Your team is weak against everything.";
+        return;
+    }
+
+    if (
+        advice.offensiveWeak.length === 0 &&
+        advice.defensiveWeak.length === 0
+    ) {
+        typeAdvice.innerText = "Your team is strong against everything.";
+        return;
+    }
+
+    const createTypeSpans = types => {
+        return types.map(typeName => {
+            const span = document.createElement("span");
+
+            span.classList.add("typeBox");
+            span.style.backgroundColor =
+                typeColors[typeName] || "gray";
+            span.innerText = typeName;
+
+            return span;
+        });
+    };
+
+    const offensiveLabel = document.createElement("div");
+    offensiveLabel.innerText = "Offensively weak against: ";
+
+    createTypeSpans(advice.offensiveWeak)
+        .forEach(span => offensiveLabel.appendChild(span));
+
+    typeAdvice.appendChild(offensiveLabel);
+
+    const defensiveLabel = document.createElement("div");
+    defensiveLabel.innerText = "Defensively weak against: ";
+
+    createTypeSpans(advice.defensiveWeak)
+        .forEach(span => defensiveLabel.appendChild(span));
+
+    typeAdvice.appendChild(defensiveLabel);
+}
+
 export {
     selectTeamSlot,
     renderPokemonInSlot,
-    removePokemonFromSlot
+    removePokemonFromSlot,
+    renderTypeAdvice
 };
