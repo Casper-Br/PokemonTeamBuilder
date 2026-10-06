@@ -23,16 +23,8 @@ async function getPokemonByType(type) {
     return data;
 }
 
-async function getPokemonTypes() {
-    const response = await fetch(TYPE_URL);
-    const data = await response.json();
-
-    return data.results.map(type => type.name);
-}
-
 export {
     getAllPokemon,
     getPokemonByName,
     getPokemonByType,
-    getPokemonTypes
 };
