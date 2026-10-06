@@ -41,7 +41,6 @@ function renderPokemonInSlot(slot, pokemon) {
 
 function removePokemonFromSlot(slot, emptySlotText) {
     slot.innerHTML = emptySlotText;
-    slot.dataset.types = "";
 }
 
 function renderTypeAdvice(advice) {

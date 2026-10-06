@@ -47,7 +47,7 @@ const supportedTypes = Object.keys(typeChart);
 renderPokemonList(allPokemon);
 initializePokemonSelection();
 renderTypeOptions(supportedTypes);
-renderTypeAdvice(calculateTypeAdvice(getTeam()));
+updateTypeAdvice();
 
 searchInput.addEventListener("input", () => {
     const query = searchInput.value;
@@ -108,9 +108,7 @@ addButton.addEventListener("click", async () => {
         setTeamPokemon(slotIndex, teamPokemon);
 
         renderPokemonInSlot(selectedSlot, teamPokemon);
-
-        const advice = calculateTypeAdvice(getTeam());
-        renderTypeAdvice(advice);
+        updateTypeAdvice();
     } catch (error) {
         console.error("Error adding Pokémon:", error);
     }
@@ -136,7 +134,11 @@ removeButton.addEventListener("click", () => {
         selectedSlot,
         emptySlotText
     );
+    
+    updateTypeAdvice();
+});
 
+function updateTypeAdvice() {
     const advice = calculateTypeAdvice(getTeam());
     renderTypeAdvice(advice);
-});
+}
