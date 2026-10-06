@@ -39,7 +39,13 @@ function renderPokemonInSlot(slot, pokemon) {
     slot.appendChild(typesEl);
 }
 
+function removePokemonFromSlot(slot, emptySlotText) {
+    slot.innerHTML = emptySlotText;
+    slot.dataset.types = "";
+}
+
 export {
     selectTeamSlot,
-    renderPokemonInSlot
+    renderPokemonInSlot,
+    removePokemonFromSlot
 };

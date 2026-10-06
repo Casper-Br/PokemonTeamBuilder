@@ -7,18 +7,27 @@ import {
     searchPokemon,
     filterPokemonByType
 } from "./logic/pokedexLogic.js";
-import { prepareTeamPokemon } from "./logic/teamLogic.js";
+import {
+    prepareTeamPokemon,
+    getEmptySlotText
+} from "./logic/teamLogic.js";
 import {
     searchInput,
     typeFilter,
     teamSlots,
-    addButton
+    addButton,
+    removeButton
 } from "./ui/dom.js";
 import {
     renderPokemonList,
     renderTypeOptions,
     selectPokemon
 } from "./ui/pokedexView.js";
+import {
+    selectTeamSlot,
+    renderPokemonInSlot,
+    removePokemonFromSlot
+} from "./ui/teamView.js";
 import { typeChart } from "./data/typeChart.js";
 import {
     getSelectedTeamSlot,
@@ -26,10 +35,6 @@ import {
     setSelectedTeamSlot,
     setSelectedPokemon
 } from "./state/appState.js";
-import {
-    selectTeamSlot,
-    renderPokemonInSlot
-} from "./ui/teamView.js";
 
 const allPokemon = await getAllPokemon();
 const supportedTypes = Object.keys(typeChart);
@@ -96,4 +101,19 @@ addButton.addEventListener("click", async () => {
     } catch (error) {
         console.error("Error adding Pokémon:", error);
     }
+});
+
+removeButton.addEventListener("click", () => {
+    const selectedSlot = getSelectedTeamSlot();
+
+    if (!selectedSlot) {
+        return;
+    }
+
+    const emptySlotText = getEmptySlotText(
+        selectedSlot,
+        teamSlots
+    );
+
+    removePokemonFromSlot(selectedSlot, emptySlotText);
 });

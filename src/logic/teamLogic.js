@@ -9,4 +9,13 @@ function prepareTeamPokemon(pokemonData) {
     };
 }
 
-export { prepareTeamPokemon };
+function getEmptySlotText(slot, teamSlots) {
+    const slotIndex = [...teamSlots].indexOf(slot) + 1;
+
+    return `Pokemon ${slotIndex}`;
+}
+
+export {
+    prepareTeamPokemon,
+    getEmptySlotText
+};
