@@ -1,7 +1,6 @@
 import {
     getAllPokemon,
     getPokemonByType,
-    getPokemonTypes
 } from "./api/pokemonApi.js";
 import {
     searchPokemon,
@@ -15,12 +14,13 @@ import {
     renderPokemonList,
     renderTypeOptions
 } from "./ui/pokedexView.js";
+import { typeChart } from "./data/typeChart.js";
 
 const allPokemon = await getAllPokemon();
-const pokemonTypes = await getPokemonTypes();
+const supportedTypes = Object.keys(typeChart);
 
 renderPokemonList(allPokemon);
-renderTypeOptions(pokemonTypes);
+renderTypeOptions(supportedTypes);
 
 searchInput.addEventListener("input", () => {
     const query = searchInput.value;
